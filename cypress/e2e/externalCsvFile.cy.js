@@ -18,7 +18,7 @@ describe("create a user with an API call", async () => {
         data = responseJson;
       });
   });
-  it(`creates and verifies a user successfully`, function () {
+  it(`creates and verifies users successfully`, function () {
     data.forEach((user) => {
       cy.request({
         method: "POST",
