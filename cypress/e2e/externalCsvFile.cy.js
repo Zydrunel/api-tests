@@ -1,10 +1,25 @@
 /// <reference types="cypress" />
-
-const usersTable = Cypress.env("usersTable");
+const neatCsv = require("neat-csv");
+let data;
 
 describe("create a user with an API call", async () => {
-  usersTable.forEach((user) => {
-    it(`creates and verifies a user ${user.name} successfully`, function () {
+  before(() => {
+    cy.request({
+      method: "GET",
+      url: "https://api.github.com/repos/Zydrunel/test_data/contents/users.csv",
+      headers: {
+        Accept: "application/vnd.github+json",
+        Authorization: "Bearer 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",
+      },
+    })
+      .then((sshresponse) => atob(sshresponse.body.content))
+      .then(neatCsv)
+      .then((responseJson) => {
+        data = responseJson;
+      });
+  });
+  it(`creates and verifies a user successfully`, function () {
+    data.forEach((user) => {
       cy.request({
         method: "POST",
         url: "/api/users",
